@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-receipt: "Courier Prime", ui-monospace, monospace;
+
+  --color-paper: #f2f4f7;
+  --color-ink: #1b2430;
+  --color-ink-soft: #4a5568;
+  --color-mute: #6b7686;
+  --color-line: #d9dee5;
+  --color-cobalt: #2b3fd6;
+  --color-cobalt-dark: #2032b0;
+  --color-cobalt-wash: #e8ebfc;
+
+  --color-ok: #0f7b5a;
+  --color-ok-wash: #e3f3ec;
+  --color-warn: #a35f00;
+  --color-warn-wash: #fbf0dc;
+  --color-bad: #c2331f;
+  --color-bad-wash: #fbe6e2;
+  --color-unknown: #5b6575;
+  --color-unknown-wash: #eceef2;
+}
+
+html,
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-cobalt);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@layer components {
+.field {
+  width: 100%;
+  background: white;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+  transition: border-color 0.12s;
+}
+.field:focus {
+  outline: none;
+  border-color: var(--color-cobalt);
+  box-shadow: 0 0 0 3px var(--color-cobalt-wash);
+}
+.field-quiet {
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem;
+  color: var(--color-ink);
+}
+.field-quiet:hover {
+  border-color: var(--color-line);
+  background: white;
+}
+.field-quiet:focus {
+  outline: none;
+  border-color: var(--color-cobalt);
+  background: white;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: var(--color-cobalt);
+  color: white;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-cobalt-dark);
+}
+.btn-ghost {
+  background: white;
+  border: 1px solid var(--color-line);
+  color: var(--color-ink);
+}
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--color-ink-soft);
+}
+.btn-text {
+  color: var(--color-ink-soft);
+  padding: 0.4rem 0.6rem;
+}
+.btn-text:hover {
+  color: var(--color-ink);
+}
+
+}
+
+/* The receipt slip: the one loud element. */
+.receipt {
+  position: relative;
+  background: #fffefb;
+  font-family: var(--font-receipt);
+  color: #2a2a2a;
+  padding: 1.4rem 1.4rem 2rem;
+  box-shadow: 0 1px 0 var(--color-line), 0 18px 30px -18px rgba(27, 36, 48, 0.35);
+  --zig: 10px;
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / calc(var(--zig) * 2) var(--zig) repeat-x,
+    linear-gradient(#000 0 0) top / 100% calc(100% - var(--zig) + 1px) no-repeat;
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / calc(var(--zig) * 2) var(--zig) repeat-x,
+    linear-gradient(#000 0 0) top / 100% calc(100% - var(--zig) + 1px) no-repeat;
+}
+.receipt-rule {
+  border: 0;
+  border-top: 1.5px dashed #b9b9b9;
+  margin: 0.8rem 0;
+}
+.stamp {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: 0.01em;
+  padding: 0.3rem 0.8rem;
+  border: 3px solid currentColor;
+  border-radius: 6px;
+  transform: rotate(-4deg);
+  mix-blend-mode: multiply;
+}
+.print-in {
+  animation: print-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.stamp-in {
+  animation: stamp-in 0.28s 0.3s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+@keyframes print-in {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(-8px);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: none;
+  }
+}
+@keyframes stamp-in {
+  from {
+    opacity: 0;
+    transform: rotate(-4deg) scale(1.6);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-4deg) scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .print-in,
+  .stamp-in {
+    animation: none;
+  }
+}
+
+.flash {
+  animation: flash 1.6s ease-out;
+}
+@keyframes flash {
+  from {
+    background: var(--color-cobalt-wash);
+  }
+  to {
+    background: transparent;
+  }
+}
